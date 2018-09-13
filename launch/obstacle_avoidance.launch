@@ -1,0 +1,12 @@
+<launch>
+  <!-- Maybe at topic (ns= ....) -->
+  <node name="transform_creater_oa" pkg="obstacle_avoidance" type="transform_creator_oa" />
+  <node name="obstacle0_publisher" pkg="obstacle_avoidance" type="obstacle0_publisher.py" />
+  <node name="obstacle1_publisher" pkg="obstacle_avoidance" type="obstacle1_publisher.py" />
+  <!-- <node name="attractor_publisher" pkg="obstacle_recognition" type="attractor_publisher.py" /> -->
+  <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
+<!-- <node name="SModelTcpNode" pkg="robotiq_s_model_control" type="SModelTcpNode.py" arg="192.168.1.11"/> -->
+  <!-- <node name="trajectory_planner" pkg="obstacle_recognition" type="trajectory_planer.py" ns='collision'/> -->
+  <!-- TODO add node for attractor controll and e -->
+  <!-- <node name="trajectory_planner" pkg="obstacle_recognition" type="trajectory_planer.py" ns='collision'/> -->
+</launch>
