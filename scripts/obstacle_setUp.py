@@ -13,20 +13,20 @@ if setUp == 'box_only':
     
     # BIG BOX
     obs=[]
-    name ='stacked_boxes'
-    a=[0.25,0.25,0.25]
-    p=[2.,2.,2.]
+    # name ='stacked_boxes'
+    # a=[0.25,0.25,0.25]
+    # p=[2.,2.,2.]
     
-    x0=[0,0,-0.2] # relative to coordinate frame
-    th_r=[0.,0.,0] # In degrees
+    # x0=[0,0,-0.2] # relative to coordinate frame
+    # th_r=[0.,0.,0] # In degrees
 
-    th_r=[th_r[i]/180.*pi for i in range(3)]
+    # th_r=[th_r[i]/180.*pi for i in range(3)]
 
-    frame_id ='box/base_link'
-    #frame_id = 'world'
-    obs.append(
-        Obstacle(a=a, th_r=th_r, p=p, x0=x0, name=name, frame_id=frame_id, w=w_0, xd=xd_0) )
-
+    # frame_id ='box/base_link'
+    # #frame_id = 'world'
+    # obs.append(
+    #     Obstacle(a=a, th_r=th_r, p=p, x0=x0, name=name, frame_id=frame_id, w=w_0, xd=xd_0) )
+ 
     # stacked_boxes
     name ='box'
     a=[0.36,0.21,0.21]

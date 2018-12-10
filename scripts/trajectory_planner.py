@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
-#'''
-#obstacle publisher class
-#
-#@author lukashuber
-#@date 2018-06-08
-#
-#'''
+'''
+obstacle publisher class
+
+@author lukashuber
+@date 2018-06-08
+
+'''
+
+# TODO: introduction
+# IMPORTANT: quaternion are defined as : q = [v a] with v:vector a:'rest' 
 
 # Custom libraries
 import sys 
@@ -20,7 +23,9 @@ from obs_common_section import *
 from class_obstacle import *
 
 # Global vairable 'obs' containing all obstacles is imported
-from obstacle_setUp import * # ipmort 
+from obstacle_setUp import * # import 'obs'
+
+print('len onbs', len(obs))
 
 # ROS tools    
 import rospy
@@ -141,6 +146,7 @@ class TrajectoryPlanner():
         awaitingTrafo_obs= [True] * self.n_obs
 
         # rospy.sleep(1)
+
         for i in range(self.n_obs):
             while (awaitingTrafo_obs[i]):
                 if i in self.it_obs_moving:
@@ -151,6 +157,7 @@ class TrajectoryPlanner():
                     self.pos_filt[i] = np.array([pose.transform.translation.x,
                                                  pose.transform.translation.y,
                                                  pose.transform.translation.z])
+                    print('post_filt', self.pos_filt)
 
                     self.q_filt[i] = np.array([pose.transform.rotation.x,
                                                pose.transform.rotation.y,
@@ -285,10 +292,11 @@ class TrajectoryPlanner():
 
                     print('norm qDIFF', LA.norm(self.q_diff[n]))
                     print('norm qfilt', LA.norm(self.q_filt[n]))
-                    omega = (2*quat_exp(quat_log(self.q_diff[n])/self.dt_filt[n])
-                                     * quat_inv(self.q_filt[n]))
+                    # omega = (2*quat_exp(quat_log(self.q_diff[n])/self.dt_filt[n])
+                             # * quat_inv(self.q_filt[n]))
+                    omega = np.zeros((4))
                     print('omega 4', LA.norm(omega))
-                    self.omega[n] = omega[0:3]     # quaternion to vector
+                    self.omega[n] = omega[:3]     # quaternion to vector
                     print('omega 3', LA.norm(self.omega[n]))
                     
                 quat_thr = tf.transformations.quaternion_from_euler(self.obs[n].th_r[0],
@@ -517,12 +525,18 @@ class TrajectoryPlanner():
         print('Also observe other possible filters.0')
         
 def quat_log(q):
+    v, a = q[:3], q[3]
     return np.hstack(( np.log(LA.norm(q)),
-                       q[:3]/LA.norm(q[:3])*np.arccos(q[0]/LA.norm(q)) ))
+                       v/LA.norm(v)*np.arccos(a/LA.norm(q)) ))
+    # return np.hstack(( np.log(LA.norm(q)),
+                       # q[:3]/LA.norm(q[:3])*np.arccos(q[3]/LA.norm(q)) ))
 
 def quat_exp(q):
-    return np.exp(q[0])*np.hstack(( np.cos(LA.norm(q[:3])),
-                                    q[:3]/LA.norm(q[:3])*np.sin(LA.norm(q[:3])) ))
+    v, a = q[:3], q[3]
+    return np.exp(a)*np.hstack(( np.cos(LA.norm(v)),
+                                    v/LA.norm(v)*np.sin(LA.norm(v)) ))
+    # return np.exp(q[3])*np.hstack(( np.cos(LA.norm(q[:3])),
+                                    # q[:3]/LA.norm(q[:3])*np.sin(LA.norm(q[:3])) ))
 
         
 if __name__ == '__main__':
